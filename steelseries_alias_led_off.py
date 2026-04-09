@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-SteelSeries Alias Micro - LED ausschalten
-Einmaliges Ausführungs-Script mit automatischem pip-Check
+SteelSeries Alias Micro - Turn off LED
+One-time execution script with automatic pip dependency check
 """
 
 import subprocess
@@ -11,9 +11,10 @@ def check_and_install(package):
     try:
         __import__(package)
     except ImportError:
-        print(f"[*] '{package}' nicht gefunden, installiere...")
+        print(f"[*] '{package}' not found, installing...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-        print(f"[+] '{package}' installiert!")
+        print(f"[+] '{package}' installed!")
+
 
 def main():
     check_and_install("hid")
@@ -27,8 +28,8 @@ def main():
     devices = hid.enumerate(VENDOR_ID, PRODUCT_ID)
 
     if not devices:
-        print("[-] SteelSeries Alias Micro nicht gefunden!")
-        print("    Stelle sicher dass das Gerät angeschlossen ist.")
+        print("[-] SteelSeries Alias Micro not found!")
+        print("    Make sure the device is connected.")
         sys.exit(1)
 
     for interface in [3, 4]:
@@ -46,12 +47,12 @@ def main():
             h.set_nonblocking(1)
             h.write(CMD_LED_OFF)
             h.close()
-            print(f"[+] LED ausgeschaltet! (Interface {interface})")
+            print(f"[+] LED turned off! (Interface {interface})")
             sys.exit(0)
         except Exception as e:
-            print(f"[-] Interface {interface} fehlgeschlagen: {e}")
+            print(f"[-] Interface {interface} failed: {e}")
 
-    print("[-] Konnte LED nicht ausschalten. Versuche: sudo python3 steelseries_alias_led_off.py")
+    print("[-] Could not turn off LED. Try: sudo python3 steelseries_alias_led_off.py")
     sys.exit(1)
 
 
